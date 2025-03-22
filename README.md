@@ -29,7 +29,7 @@ import numpy as np
 ## 3. Encoding ECDLP into Qiskit Circuits
 
 ### 3.1 Representation of the Elliptic Curve
-We work with the curve \( y^2 = x^3 + 7 \) over a finite field \( \mathbb{F}_p \). Choose a prime number \( p \) and a base point \( P \):
+We work with the curve \( y<sup>2</sup> = x<sup>3</sup> + 7 \) over a finite field \( \mathbb{F}_p \). Choose a prime number \( p \) and a base point \( P \):
 
 ```python
 p = 23  # Prime modulus
