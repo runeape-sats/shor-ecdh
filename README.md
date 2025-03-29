@@ -1,101 +1,120 @@
 # Solving Discrete Logarithm Problems in ECDH Using Qiskit
 
-This guide walks through the process of using Qiskit to solve discrete logarithm problems in the context of Elliptic Curve Diffie-Hellman (ECDH), specifically on the SECP256K1-like curve:
+This guide demonstrates how to use Qiskit to explore the Elliptic Curve Discrete Logarithm Problem (ECDLP) in the context of Elliptic Curve Diffie-Hellman (ECDH), focusing on the curve:
 
-y<sup>2</sup> = x<sup>3</sup> + 7
+$$ y^2 = x^3 + 7 $$
+
+We’ll use a simplified example to illustrate the quantum approach, adapting Shor’s algorithm conceptually for ECDLP.
 
 ## 1. Introduction to the Problem
 
-Elliptic Curve Cryptography (ECC) relies on the hardness of the Elliptic Curve Discrete Logarithm Problem (ECDLP), which states that given two points \( P \) and \( Q = kP \), finding \( k \) is computationally hard. Quantum algorithms, particularly Shor’s algorithm, provide a way to solve this problem efficiently.
+Elliptic Curve Cryptography (ECC) underpins ECDH and relies on the computational hardness of the ECDLP: given points $P$ (a generator) and $Q = kP$ on an elliptic curve, finding the integer $k$ is infeasible with classical computers. Quantum computing, particularly Shor’s algorithm, offers a polynomial-time solution, threatening ECC’s security. Here, we simulate this process using Qiskit on a small-scale curve resembling SECP256K1’s form.
 
 ## 2. Setting Up Qiskit
 
-To begin, install Qiskit if you haven't already:
+Install Qiskit if you haven’t already:
 
 ```bash
-pip install qiskit
+pip install qiskit qiskit-aer
 ```
 
-Now, import the necessary libraries:
+Import the required libraries:
 
 ```python
-from qiskit import QuantumCircuit, Aer, transpile, assemble, execute
-from qiskit.algorithms import Shor
-from qiskit.utils import QuantumInstance
-from qiskit.providers.aer import AerSimulator
+from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
 import numpy as np
 ```
 
 ## 3. Encoding ECDLP into Qiskit Circuits
 
 ### 3.1 Representation of the Elliptic Curve
-We work with the curve \( y<sup>2</sup> = x<sup>3</sup> + 7 \) over a finite field \( \mathbb{F}_p \). Choose a prime number \( p \) and a base point \( P \):
+
+We define the curve $y^2 = x^3 + 7$ over a finite field $\mathbb{F}_p$, where $p$ is a small prime for demonstration (real-world curves like SECP256K1 use much larger primes, e.g., $p \approx 2^{256}$):
 
 ```python
-p = 23  # Prime modulus
-a, b = 0, 7  # Curve parameters
-G = (5, 19)  # Base point on the curve
+p = 17  # Small prime for simplicity
+a, b = 0, 7  # Curve: y^2 = x^3 + 7
+G = (5, 8)  # Base point (verified: 8^2 ≡ 5^3 + 7 ≡ 13 mod 17)
 ```
+
+Verify $G = (5, 8)$ lies on the curve:
+- Left: $8^2 = 64 \equiv 13 \pmod{17}$
+- Right: $5^3 + 7 = 125 + 7 = 132 \equiv 13 \pmod{17}$
+- $13 = 13$, so $(5, 8)$ is valid.
 
 ### 3.2 Quantum Fourier Transform for Discrete Logarithm
 
-Shor’s algorithm requires modular exponentiation, which in the elliptic curve setting corresponds to point multiplication. This involves representing integers in quantum registers and applying the Quantum Fourier Transform (QFT).
-
-Define the QFT circuit:
+Shor’s algorithm uses the Quantum Fourier Transform (QFT) to extract periodicity. For ECDLP, we seek $k$ where $Q = kP$, leveraging QFT to estimate phases related to the curve’s order. Define the QFT circuit:
 
 ```python
 def qft(n):
     qc = QuantumCircuit(n)
     for i in range(n):
-        for j in range(i):
-            qc.cp(np.pi / 2**(i-j), j, i)
         qc.h(i)
+        for j in range(i + 1, n):
+            qc.cp(np.pi / 2**(j - i), j, i)
+    for i in range(n // 2):
+        qc.swap(i, n - 1 - i)
     return qc
 ```
 
 ### 3.3 Implementing Shor’s Algorithm for ECDLP
 
-Shor’s algorithm can be adapted to find the discrete log \( k \) given points \( P \) and \( Q = kP \). Use modular arithmetic circuits and phase estimation:
+Shor’s algorithm for classic discrete logs ($g^k \equiv h \pmod{p}$) uses modular exponentiation. For ECDLP, we need elliptic curve point multiplication ($kP$), which is complex to implement quantumly. Here, we simulate the structure with a simplified circuit:
 
 ```python
-def shors_dlog(N):
-    qc = QuantumCircuit(N*2)
-    
-    # Apply Hadamard to first register
-    for qubit in range(N):
+def shors_dlog(n_qubits):
+    qc = QuantumCircuit(2 * n_qubits, n_qubits)  # Two registers: control and target
+    # Apply Hadamard gates to control register
+    for qubit in range(n_qubits):
         qc.h(qubit)
-    
-    # Modular multiplication (simulated)
-    for qubit in range(N):
-        qc.cx(qubit, N + qubit)
-    
-    # Apply QFT
-    qc.append(qft(N).to_gate(), range(N))
-    
-    qc.measure_all()
+    # Placeholder for EC point multiplication (Q = kP)
+    # In practice, this requires custom gates for elliptic curve arithmetic
+    for qubit in range(n_qubits):
+        qc.cx(qubit, n_qubits + qubit)  # Simplified stand-in for demonstration
+    # Apply QFT to control register
+    qc.append(qft(n_qubits).to_gate(), range(n_qubits))
+    qc.measure(range(n_qubits), range(n_qubits))
     return qc
 
-N = 4  # Number of qubits
-qc = shors_dlog(N)
+n = 4  # Small qubit count for simulation
+qc = shors_dlog(n)
 ```
+
+**Note**: This is a conceptual simplification. Real ECDLP solvers need:
+- Quantum circuits for elliptic curve addition/multiplication.
+- The curve’s order $n$ (where $nP = \mathcal{O}$, the point at infinity).
 
 ### 3.4 Running the Quantum Circuit
 
-Use the Aer simulator to execute the circuit:
+Execute the circuit using the AerSimulator:
 
 ```python
-backend = Aer.get_backend("qasm_simulator")
-job = execute(qc, backend, shots=1024)
-result = job.result()
+backend = AerSimulator()
+t_qc = qc.decompose()  # Optional: visualize gate decomposition
+result = backend.run(t_qc, shots=1024).result()
 counts = result.get_counts()
-print(counts)
+print("Measurement results:", counts)
 ```
 
 ## 4. Interpreting Results
 
-The most frequent measurement result corresponds to the discrete logarithm \( k \). Classical post-processing retrieves the value efficiently.
+The output provides phase estimates tied to $k$ modulo the curve’s order. In Shor’s algorithm, the most frequent measurements yield fractions $s/r$, where $r$ is the period (or order). Classical post-processing (e.g., continued fractions) extracts $k$. For this toy example, the simplified circuit doesn’t fully simulate ECDLP, so results are illustrative rather than functional.
 
 ## 5. Conclusion
 
-This guide demonstrates how to apply Qiskit circuits to solve the discrete logarithm problem in the context of ECDH. Future work includes optimizing quantum circuits and using real quantum hardware.
+This guide outlines a quantum approach to solving ECDLP in ECDH using Qiskit, focusing on a small-scale curve $y^2 = x^3 + 7$. The example simplifies elliptic curve arithmetic, which remains a significant challenge for real implementations. Key limitations include:
+- **Qubit Requirements**: Cracking SECP256K1 requires hundreds of logical qubits, far beyond current hardware (e.g., 256-bit keys need ~2000-3000 qubits with error correction).
+- **Noise**: Real quantum devices introduce errors, necessitating fault-tolerant systems.
+- **Circuit Complexity**: Full ECDLP circuits demand custom gates, not yet standard in Qiskit.
 
+Future work involves optimizing these circuits, integrating true elliptic curve operations, and testing on emerging quantum hardware.
+
+## 6. Citations
+
+- [1] Shor, P. W. (1994). "Algorithms for Quantum Computation: Discrete Logarithms and Factoring." *Proceedings of the 35th Annual Symposium on Foundations of Computer Science*. IEEE. DOI: 10.1109/SFCS.1994.365700.
+- [2] Silverman, J. H. (2009). *The Arithmetic of Elliptic Curves*. Springer. ISBN: 978-0-387-09493-9.
+- [3] Qiskit Team. (2023). "Qiskit: An Open-Source Framework for Quantum Computing." *Qiskit Documentation*. Available at: https://qiskit.org/documentation/.
+- [4] Proos, J., & Zalka, C. (2003). "Shor’s Discrete Logarithm Quantum Algorithm for Elliptic Curves." *Quantum Information & Computation*, 3(4), 317-344.
+  
