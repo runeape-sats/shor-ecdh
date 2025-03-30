@@ -1,5 +1,7 @@
 # Solving Discrete Logarithm Problems in ECDH Using Qiskit
 
+v0.0.1
+
 This guide demonstrates how to use Qiskit to explore the Elliptic Curve Discrete Logarithm Problem (ECDLP) in the context of Elliptic Curve Diffie-Hellman (ECDH), focusing on the curve:
 
 $$ y^2 = x^3 + 7 $$
