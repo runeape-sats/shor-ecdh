@@ -6,7 +6,9 @@ This guide demonstrates how to use Qiskit to explore the Elliptic Curve Discrete
 
 $$ y^2 = x^3 + 7 $$
 
-We’ll use a simplified example to illustrate the quantum approach, adapting Shor’s algorithm conceptually for ECDLP.
+We’ll use a simplified example to illustrate the quantum approach, adapting Shor’s algorithm conceptually for ECDLP. If this toy python script runs correctly, you will see this quantum gate diagram:
+
+<img width="1251" alt="Screenshot 2025-03-31 at 8 31 41 AM" src="https://github.com/user-attachments/assets/f0055658-28a3-4973-aadd-b4fe396aa82f" />
 
 ## 1. Introduction to the Problem
 
@@ -17,13 +19,13 @@ Elliptic Curve Cryptography (ECC) underpins ECDH and relies on the computational
 Install Qiskit if you haven’t already:
 
 ```bash
-pip install qiskit qiskit-aer
+pip install qiskit qiskit_aer numpy
 ```
 
 Import the required libraries:
 
 ```python
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 import numpy as np
 ```
