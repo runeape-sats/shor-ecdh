@@ -1,29 +1,31 @@
 # Solving Discrete Logarithm Problems in ECDH Using Qiskit
 
-v0.0.1
+v0.0.2
 
 This guide demonstrates how to use Qiskit to explore the Elliptic Curve Discrete Logarithm Problem (ECDLP) in the context of Elliptic Curve Diffie-Hellman (ECDH), focusing on the curve:
 
 $$ y^2 = x^3 + 7 $$
 
-We’ll use a simplified example to illustrate the quantum approach, adapting Shor’s algorithm conceptually for ECDLP.
+We’ll use a simplified example to illustrate the quantum approach, adapting Shor’s algorithm conceptually for ECDLP. If this toy python script `shor_ecdlp_toy.py` runs correctly, you will see this quantum gate diagram:
+
+<img width="1251" alt="quantum gate diagram" src="https://github.com/user-attachments/assets/f0055658-28a3-4973-aadd-b4fe396aa82f" />
 
 ## 1. Introduction to the Problem
 
-Elliptic Curve Cryptography (ECC) underpins ECDH and relies on the computational hardness of the ECDLP: given points $P$ (a generator) and $Q = kP$ on an elliptic curve, finding the integer $k$ is infeasible with classical computers. Quantum computing, particularly Shor’s algorithm, offers a polynomial-time solution, threatening ECC’s security. Here, we simulate this process using Qiskit on a small-scale curve resembling SECP256K1’s form.
+Elliptic Curve Cryptography (ECC) underpins ECDH and relies on the computational hardness of the ECDLP: given points $P$ (a generator) and $Q = kP$ on an elliptic curve, finding the integer $k$ is infeasible with classical computers. Quantum computing, particularly Shor’s algorithm, offers a polynomial-time solution, threatening ECC’s security. Here, we simulate this process using Qiskit on a small-scale curve resembling SECP256K1’s form. This repo focuses on python sample scripts that can be deployed on quantum cloud vendors. For checking the math part of adapting Shor's factoring algorithm into solving discrete log, please go to https://github.com/runeape-sats/shor-secp256k1.
 
 ## 2. Setting Up Qiskit
 
 Install Qiskit if you haven’t already:
 
 ```bash
-pip install qiskit qiskit-aer
+pip install qiskit qiskit_aer numpy
 ```
 
 Import the required libraries:
 
 ```python
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 import numpy as np
 ```
