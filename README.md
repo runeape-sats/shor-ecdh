@@ -1,6 +1,6 @@
 # Solving Discrete Logarithm Problems in ECDH Using Qiskit
 
-v0.0.1
+v0.0.2
 
 This guide demonstrates how to use Qiskit to explore the Elliptic Curve Discrete Logarithm Problem (ECDLP) in the context of Elliptic Curve Diffie-Hellman (ECDH), focusing on the curve:
 
@@ -8,7 +8,7 @@ $$ y^2 = x^3 + 7 $$
 
 We’ll use a simplified example to illustrate the quantum approach, adapting Shor’s algorithm conceptually for ECDLP. If this toy python script runs correctly, you will see this quantum gate diagram:
 
-<img width="1251" alt="Screenshot 2025-03-31 at 8 31 41 AM" src="https://github.com/user-attachments/assets/f0055658-28a3-4973-aadd-b4fe396aa82f" />
+<img width="1251" alt="quantum gate diagram" src="https://github.com/user-attachments/assets/f0055658-28a3-4973-aadd-b4fe396aa82f" />
 
 ## 1. Introduction to the Problem
 
