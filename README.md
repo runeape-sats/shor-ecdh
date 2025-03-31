@@ -6,7 +6,7 @@ This guide demonstrates how to use Qiskit to explore the Elliptic Curve Discrete
 
 $$ y^2 = x^3 + 7 $$
 
-We’ll use a simplified example to illustrate the quantum approach, adapting Shor’s algorithm conceptually for ECDLP. If this toy python script runs correctly, you will see this quantum gate diagram:
+We’ll use a simplified example to illustrate the quantum approach, adapting Shor’s algorithm conceptually for ECDLP. If this toy python script `shor_ecdlp_toy.py` runs correctly, you will see this quantum gate diagram:
 
 <img width="1251" alt="quantum gate diagram" src="https://github.com/user-attachments/assets/f0055658-28a3-4973-aadd-b4fe396aa82f" />
 
