@@ -12,7 +12,7 @@ We’ll use a simplified example to illustrate the quantum approach, adapting Sh
 
 ## 1. Introduction to the Problem
 
-Elliptic Curve Cryptography (ECC) underpins ECDH and relies on the computational hardness of the ECDLP: given points $P$ (a generator) and $Q = kP$ on an elliptic curve, finding the integer $k$ is infeasible with classical computers. Quantum computing, particularly Shor’s algorithm, offers a polynomial-time solution, threatening ECC’s security. Here, we simulate this process using Qiskit on a small-scale curve resembling SECP256K1’s form.
+Elliptic Curve Cryptography (ECC) underpins ECDH and relies on the computational hardness of the ECDLP: given points $P$ (a generator) and $Q = kP$ on an elliptic curve, finding the integer $k$ is infeasible with classical computers. Quantum computing, particularly Shor’s algorithm, offers a polynomial-time solution, threatening ECC’s security. Here, we simulate this process using Qiskit on a small-scale curve resembling SECP256K1’s form. This repo focuses on python sample scripts that can be deployed on quantum cloud vendors. For checking the math part of adapting Shor's factoring algorithm into solving discrete log, please go to https://github.com/runeape-sats/shor-secp256k1.
 
 ## 2. Setting Up Qiskit
 
