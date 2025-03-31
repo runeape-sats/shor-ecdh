@@ -14,8 +14,10 @@ We’ll use a simplified example to illustrate the quantum approach, adapting Sh
 
 Elliptic Curve Cryptography (ECC) underpins ECDH and relies on the computational hardness of the ECDLP: given points $P$ (a generator) and $Q = kP$ on an elliptic curve, finding the integer $k$ is infeasible with classical computers. Quantum computing, particularly Shor’s algorithm, offers a polynomial-time solution, threatening ECC’s security. Here, we simulate this process using Qiskit on a small-scale curve resembling SECP256K1’s form. This repo focuses on python sample scripts that can be deployed on quantum cloud vendors. For checking the math part of adapting Shor's factoring algorithm into solving discrete log, please go to https://github.com/runeape-sats/shor-secp256k1.
 
-## 2. Setting Up Qiskit
+## 2. Quick Start
+Choose local or cloud installation for Qiskit.
 
+### 2.1 Local installation
 Install Qiskit if you haven’t already:
 
 ```bash
@@ -29,6 +31,12 @@ from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 import numpy as np
 ```
+
+### 2.1 Colab installation (cloud-based)
+- Go to https://colab.research.google.com/#create=true
+- Enter code `!pip install qiskit qiskit_aer numpy` then run the code block
+- Copy/paste full-text of [shor_ecdh_toy.py](https://raw.githubusercontent.com/runeape-sats/shor-ecdh/refs/heads/main/shor_ecdlp_toy.py) then run the coding block
+- Check if you see the quantum gate diagram. If yes, u successfully ran the sample code!
 
 ## 3. Encoding ECDLP into Qiskit Circuits
 
