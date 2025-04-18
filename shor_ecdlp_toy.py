@@ -17,6 +17,7 @@ current classical simulation capabilities.
 try:
     from qiskit import QuantumCircuit, transpile
     from qiskit_aer import AerSimulator
+    from qiskit.qasm3 import dumps
     import numpy as np
     print("Qiskit, Qiskit Aer, and NumPy imported successfully.")
 except ImportError as e:
@@ -177,3 +178,7 @@ if __name__ == "__main__":
     print("2. A quantum computer with sufficient qubits and low noise.")
     print("3. Classical continued fractions for large orders.")
     print("\n--- Script Finished ---")
+
+    print("\n\n--- Export the circuit to an OpenQASM 3.0 string ---")
+    qasm3_output = dumps(circuit)
+    print(qasm3_output)
